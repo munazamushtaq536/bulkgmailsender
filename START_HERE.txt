@@ -1,0 +1,125 @@
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║        🚀 HOW TO RUN YOUR BULK GMAIL SENDER                  ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+📋 STEP-BY-STEP INSTRUCTIONS:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 1: Install Node.js (If not installed)
+───────────────────────────────────────────────
+
+1. Go to: https://nodejs.org/
+2. Download the LTS version
+3. Run the installer
+4. Follow the installation wizard
+5. Restart your computer
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 2: Install Dependencies
+───────────────────────────────────────────────
+
+Open PowerShell or Command Prompt in this folder and run:
+
+    npm install
+
+This will download all required packages.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 3: Setup Google Cloud (Required for Email Sending)
+────────────────────────────────────────────────────────────────
+
+You need Google credentials to send emails:
+
+1. Visit: https://console.cloud.google.com/
+2. Create a new project
+3. Enable "Gmail API"
+4. Create OAuth 2.0 credentials
+5. Copy Client ID and Client Secret
+
+📝 Detailed guide: See SETUP.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 4: Create Configuration File
+────────────────────────────────────────────────────────────────
+
+Run these commands:
+
+    copy .env.example .env
+    notepad .env
+
+Then add your Google credentials:
+
+    CLIENT_ID=your_client_id_here
+    CLIENT_SECRET=your_client_secret_here
+    REDIRECT_URI=http://localhost:3000/oauth2callback
+    PORT=3000
+
+Save and close notepad.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 5: Start the Server
+─────────────────────────
+
+Run:
+
+    npm start
+
+You should see:
+    "Server running on http://localhost:3000"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 6: Use the App
+───────────────────
+
+1. Open your browser
+2. Go to: http://localhost:3000
+3. Click "Connect Gmail Account"
+4. Sign in and grant permissions
+5. Start sending emails!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚡ QUICK START (All-in-One):
+
+    npm install
+    copy .env.example .env
+    notepad .env    (add your Google credentials)
+    npm start
+
+Then open: http://localhost:3000
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ IF YOU GET ERRORS:
+
+"npm is not recognized"
+→ Install Node.js from https://nodejs.org/
+
+"Cannot find module"
+→ Run: npm install
+
+"Port 3000 already in use"
+→ Change PORT in .env to 3001
+
+"Authentication failed"
+→ Check your Google credentials in .env
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 NEED MORE HELP?
+
+- Quick start: See RUN_APP.md
+- Setup guide: See SETUP.md  
+- Features: See FUNCTIONALITIES_AND_WORKFLOW.md
+- Overview: See PROJECT_OVERVIEW.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

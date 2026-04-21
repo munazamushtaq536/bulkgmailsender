@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Fire Mail - Bulk Gmail Sender",
+  "version": "1.0.1",
+  "description": "Send personalized emails to multiple recipients directly from Chrome.",
+  "permissions": [
+    "storage",
+    "identity",
+    "identity.email"
+  ],
+  "host_permissions": [
+    "https://gmail.googleapis.com/*",
+    "https://*.vercel.app/*"
+  ],
+  "oauth2": {
+    "client_id": "250025692683-9aqk0jv5kp3qd3r9d8jbklkdn22k2ijd.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/gmail.send",
+      "https://www.googleapis.com/auth/gmail.compose",
+      "https://www.googleapis.com/auth/userinfo.email"
+    ]
+  },
+  "action": {
+    "default_popup": "public/index.html",
+    "default_title": "Open Fire Mail"
+  },
+  "icons": {
+    "128": "public/photos/logo.png"
+  }
+}
