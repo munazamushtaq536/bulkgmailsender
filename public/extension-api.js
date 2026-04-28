@@ -1,8 +1,9 @@
 // Extension configuration
+// 🔧 UPDATE VERCEL_URL below with your actual Vercel deployment URL!
 const CONFIG = {
-    USE_VERCEL: false, // Set to true once you deploy to Vercel
-    VERCEL_URL: 'https://your-fire-mail-app.vercel.app', // Update this after deployment
-    API_MOCK_ENABLED: true // Keep true until USE_VERCEL is fully configured
+    USE_VERCEL: true,        // Enabled — routes all /api/ calls to Vercel
+    VERCEL_URL: 'https://your-fire-mail-app.vercel.app', // ← Replace with your Vercel URL
+    API_MOCK_ENABLED: false  // Disabled — using real Vercel + Supabase backend
 };
 
 const originalFetch = window.fetch;
