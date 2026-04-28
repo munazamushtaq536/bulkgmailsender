@@ -2,7 +2,7 @@
 // 🔧 UPDATE VERCEL_URL below with your actual Vercel deployment URL!
 const CONFIG = {
     USE_VERCEL: true,        // Enabled — routes all /api/ calls to Vercel
-    VERCEL_URL: 'https://your-fire-mail-app.vercel.app', // ← Replace with your Vercel URL
+    VERCEL_URL: 'https://bulkgmailsender.vercel.app', // ← Your Vercel domain
     API_MOCK_ENABLED: false  // Disabled — using real Vercel + Supabase backend
 };
 
