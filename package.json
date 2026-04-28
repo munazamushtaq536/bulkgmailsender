@@ -16,7 +16,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@neondatabase/serverless": "^1.1.0",
+    "@supabase/supabase-js": "^2.105.0",
     "@upstash/redis": "^1.37.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
