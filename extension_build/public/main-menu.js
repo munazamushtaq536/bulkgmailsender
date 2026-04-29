@@ -228,6 +228,35 @@ function setupEventListeners() {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', logout);
     }
+
+    // Event delegation for dynamic buttons (CSP-compliant)
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const action = btn.getAttribute('data-action');
+
+        if (action === 'load-builtin') {
+            loadTemplate(parseInt(btn.getAttribute('data-num')));
+        } else if (action === 'edit-recipient') {
+            editRecipient(btn.getAttribute('data-email'));
+        } else if (action === 'delete-recipient') {
+            deleteRecipient(btn.getAttribute('data-email'));
+        } else if (action === 'use-template') {
+            window.useTemplate(parseInt(btn.getAttribute('data-id')));
+        } else if (action === 'edit-template') {
+            window.editTemplate(parseInt(btn.getAttribute('data-id')));
+        } else if (action === 'delete-template') {
+            window.deleteTemplate(parseInt(btn.getAttribute('data-id')));
+        } else if (action === 'view-email') {
+            window.viewEmailDetails(btn.getAttribute('data-id'));
+        } else if (action === 'delete-email') {
+            window.deleteSentEmailRecord(btn.getAttribute('data-id'));
+        } else if (action === 'fix-status') {
+            window.editRecordStatus(btn.getAttribute('data-email'), 'pending');
+        } else if (action === 'delete-schedule') {
+            window.deleteSchedule(parseInt(btn.getAttribute('data-id')));
+        }
+    });
 }
 
 // Add recipients
@@ -312,10 +341,22 @@ async function handleCSVUpload(e) {
 async function loadRecipients() {
     try {
         const response = await fetch(`${API_BASE}/api/recipients`);
-        const recipients = await response.json();
+        const data = await response.json();
 
         const recipientsList = document.getElementById('recipients-list');
         if (!recipientsList) return;
+
+        // Handle error object instead of array
+        if (data.error || !Array.isArray(data)) {
+            console.error('Failed to load recipients from API:', data);
+            recipientsList.innerHTML = `<p class="error-state" style="color: #d32f2f; font-weight: bold; padding: 1rem;">
+                ⚠️ ${data.error || 'Server returned invalid data format'}
+                <br><small>If you haven't set up Supabase yet, use the provided SQL script.</small>
+            </p>`;
+            return;
+        }
+
+        const recipients = data;
 
         if (recipients.length === 0) {
             recipientsList.innerHTML = '<p class="empty-state">No recipients added yet</p>';
@@ -330,8 +371,8 @@ async function loadRecipients() {
                     <span class="recipient-email-text">${recipient.email}</span>
                     <div class="recipient-right">
                         <span class="recipient-status ${statusClass}">${recipient.status || 'pending'}</span>
-                        <button class="btn-icon btn-edit" onclick="editRecipient('${encodedEmail}')" title="Edit email">✏️</button>
-                        <button class="btn-icon btn-remove" onclick="deleteRecipient('${encodedEmail}')" title="Remove recipient">🗑️</button>
+                        <button class="btn-icon btn-edit" data-action="edit-recipient" data-email="${encodedEmail}" title="Edit email">✏️</button>
+                        <button class="btn-icon btn-remove" data-action="delete-recipient" data-email="${encodedEmail}" title="Remove recipient">🗑️</button>
                     </div>
                 </div>
             `;
@@ -878,9 +919,9 @@ async function loadTemplates() {
                     <h3>${template.name || 'Unnamed'}</h3>
                     <p>${template.subject || '(No Subject)'}</p>
                     <div class="template-actions">
-                        <button class="btn btn-secondary" onclick="useTemplate(${template.id})">Use Template</button>
-                        <button class="btn btn-secondary" onclick="editTemplate(${template.id})">Edit</button>
-                        <button class="btn btn-danger" onclick="deleteTemplate(${template.id})">Delete</button>
+                        <button class="btn btn-secondary" data-action="use-template" data-id="${template.id}">Use Template</button>
+                        <button class="btn btn-secondary" data-action="edit-template" data-id="${template.id}">Edit</button>
+                        <button class="btn btn-danger" data-action="delete-template" data-id="${template.id}">Delete</button>
                     </div>
                 `;
                 templatesGrid.appendChild(templateCard);
@@ -1133,9 +1174,9 @@ async function loadSentEmails() {
                                 <td>${email.sentAt ? new Date(email.sentAt).toLocaleString() : 'Date unknown'}</td>
                                 <td>
                                     <div class="row-actions">
-                                        <button class="btn btn-small" onclick="viewEmailDetails('${email.id}')" title="View email details">👁️</button>
-                                        <button class="btn btn-small btn-danger" onclick="deleteSentEmailRecord('${email.id}')" title="Remove from history">🗑️</button>
-                                        ${email.status === 'failed' ? `<button class="btn btn-small" onclick="editRecordStatus('${email.recipientEmail}', 'pending')" title="Fix and retry">✏️</button>` : ''}
+                                        <button class="btn btn-small" data-action="view-email" data-id="${email.id}" title="View email details">👁️</button>
+                                        <button class="btn btn-small btn-danger" data-action="delete-email" data-id="${email.id}" title="Remove from history">🗑️</button>
+                                        ${email.status === 'failed' ? `<button class="btn btn-small" data-action="fix-status" data-email="${email.recipientEmail}" title="Fix and retry">✏️</button>` : ''}
                                     </div>
                                 </td>
                             </tr>
@@ -1318,7 +1359,7 @@ async function loadSchedules() {
                             <p>Status: <span class="status-badge status-${schedule.status || 'pending'}">${schedule.status || 'pending'}</span></p>
                             <p>Recipients: ${schedule.selectedRecipients ? schedule.selectedRecipients.length : 0}</p>
                         </div>
-                        <button class="btn btn-danger btn-small" onclick="deleteSchedule(${schedule.id})">Delete</button>
+                        <button class="btn btn-danger btn-small" data-action="delete-schedule" data-id="${schedule.id}">Delete</button>
                     </div>
                 `).join('');
             }
