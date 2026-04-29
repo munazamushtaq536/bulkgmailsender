@@ -1,9 +1,9 @@
 // Extension configuration
 // 🔧 UPDATE VERCEL_URL below with your actual Vercel deployment URL!
 const CONFIG = {
-    USE_VERCEL: false,        // Enabled — routes all /api/ calls to Vercel
+    USE_VERCEL: true,        // Enabled — routes all /api/ calls to Vercel
     VERCEL_URL: 'https://bulkgmailsender.vercel.app', // ← Your Vercel domain
-    API_MOCK_ENABLED: true  // Disabled — using real Vercel + Supabase backend
+    API_MOCK_ENABLED: false  // Disabled — using real Vercel + Supabase backend
 };
 
 const originalFetch = window.fetch;
