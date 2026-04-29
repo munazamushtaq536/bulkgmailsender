@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Menu</title>
+    <link rel="icon" type="image/png" href="photos/logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="main-menu.css">
+</head>
+
+<body>
+    <div class="main-menu-container top-nav-layout">
+        <!-- Top Header for Branding and Actions -->
+        <header class="top-header">
+            <div class="top-bar-brand">
+                <img src="photos/logo.png" alt="App Logo" class="top-logo">
+                <span class="top-tagline">Fire Mail Premium</span>
+            </div>
+
+            <div class="top-bar-actions">
+                <span id="user-email-header" class="user-email-text"></span>
+                <button id="header-connect-btn" class="btn btn-secondary btn-small">Switch Account</button>
+                <button id="header-logout-btn" class="btn btn-danger btn-small">Logout</button>
+            </div>
+        </header>
+
+        <!-- Secondary Navigation Bar -->
+        <nav class="top-nav-bar">
+            <ul class="menu-list top-menu-list">
+                <li class="menu-item active" data-section="input">
+                    <span class="menu-icon">📥</span>
+                    <span class="menu-text">Input</span>
+                </li>
+                <li class="menu-item" data-section="send">
+                    <span class="menu-icon">📧</span>
+                    <span class="menu-text">Send</span>
+                </li>
+                <li class="menu-item" data-section="schedule">
+                    <span class="menu-icon">⏰</span>
+                    <span class="menu-text">Schedule</span>
+                </li>
+                <li class="menu-item" data-section="template">
+                    <span class="menu-icon">📝</span>
+                    <span class="menu-text">Template</span>
+                </li>
+                <li class="menu-item" data-section="record">
+                    <span class="menu-icon">💾</span>
+                    <span class="menu-text">Record</span>
+                </li>
+                <li class="menu-item" data-section="exit">
+                    <span class="menu-icon">🚪</span>
+                    <span class="menu-text">Exit</span>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <!-- Input Section -->
+            <section id="input-section" class="content-section active">
+                <h2>📥 Input</h2>
+                <div class="section-content">
+                    <div class="input-card">
+                        <h3>Add Recipients</h3>
+                        <div class="form-group">
+                            <label for="recipients-input">Enter email addresses</label>
+                            <textarea id="recipients-input"
+                                placeholder="Enter email addresses (one per line or comma-separated)"
+                                rows="6"></textarea>
+                        </div>
+                        <div class="button-group">
+                            <button id="add-recipients-btn" class="btn btn-primary">Add Recipients</button>
+                            <label for="csv-file" class="btn btn-secondary">📁 Upload CSV</label>
+                            <input type="file" id="csv-file" accept=".csv" style="display: none;">
+                        </div>
+                    </div>
+
+                    <div class="recipients-list-card">
+                        <h3>Recipients List</h3>
+                        <div class="recipients-list" id="recipients-list">
+                            <p class="empty-state">No recipients added yet</p>
+                        </div>
+                        <div class="button-group">
+                            <button id="clear-recipients-btn" class="btn btn-danger">Clear All</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Send Section -->
+            <section id="send-section" class="content-section">
+                <h2>📧 Send</h2>
+                <div class="section-content">
+                    <div class="info-card">
+                        <p><strong>Send emails using your CSV file with email list.</strong></p>
+                        <p>Make sure you have:</p>
+                        <ul>
+                            <li>✅ Added recipients (Input section)</li>
+                            <li>✅ Composed your email (below)</li>
+                            <li>✅ Connected your Gmail account</li>
+                        </ul>
+                    </div>
+
+                    <div class="email-composer-card">
+                        <h3>Compose Email</h3>
+                        <div class="form-group">
+                            <label for="send-template-select">Load from Template (optional)</label>
+                            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                <select id="send-template-select"
+                                    style="flex: 1; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem;">
+                                    <option value="">-- Select a template --</option>
+                                    <option value="builtin-1">Template 1 – Professional Greeting</option>
+                                    <option value="builtin-2">Template 2 – Newsletter Update</option>
+                                    <option value="builtin-3">Template 3 – Special Promotion</option>
+                                </select>
+                                <button id="load-template-btn" class="btn btn-secondary"
+                                    style="white-space: nowrap;">Load Template</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject-input">Subject</label>
+                            <input type="text" id="subject-input" placeholder="Enter email subject">
+                        </div>
+                        <div class="form-group">
+                            <label for="body-input">Body (HTML supported)</label>
+                            <textarea id="body-input" placeholder="Enter email body..." rows="10"></textarea>
+                            <small>HTML tags are supported. Use &lt;br&gt; for line breaks.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="delay-input">Delay between emails (ms)</label>
+                            <input type="number" id="delay-input" value="2000" min="1000" max="10000" step="500">
+                            <small>Recommended: 2000ms to avoid rate limits</small>
+                        </div>
+                        <button id="send-btn" class="btn btn-primary btn-large">🚀 Send Emails</button>
+
+                        <div id="progress-section" class="hidden">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <p id="progress-text" class="progress-text"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Schedule Section -->
+            <section id="schedule-section" class="content-section">
+                <h2>⏰ Schedule</h2>
+                <div class="section-content">
+                    <div class="schedule-card">
+                        <h3>Auto Sending</h3>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="enable-schedule"> Enable Scheduled Sending
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="schedule-subject">Subject</label>
+                            <input type="text" id="schedule-subject" placeholder="Enter email subject">
+                        </div>
+                        <div class="form-group">
+                            <label for="schedule-body">Body</label>
+                            <textarea id="schedule-body" rows="6" placeholder="Enter email body"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="schedule-date">Date</label>
+                            <input type="date" id="schedule-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="schedule-time">Time</label>
+                            <input type="time" id="schedule-time">
+                        </div>
+                        <button id="save-schedule-btn" class="btn btn-primary">Save Schedule</button>
+                        <div id="schedule-status" class="schedule-status hidden"></div>
+                    </div>
+                    <div id="schedule-list" class="schedule-list"></div>
+                </div>
+            </section>
+
+            <!-- Email Template Section -->
+            <section id="template-section" class="content-section">
+                <h2>📝 Email Template</h2>
+                <div class="section-content">
+                    <div class="templates-grid">
+                        <div class="template-card">
+                            <h3>Template 1</h3>
+                            <p>Professional greeting template</p>
+                            <button class="btn btn-secondary" onclick="loadTemplate(1)">Use Template</button>
+                        </div>
+                        <div class="template-card">
+                            <h3>Template 2</h3>
+                            <p>Newsletter template</p>
+                            <button class="btn btn-secondary" onclick="loadTemplate(2)">Use Template</button>
+                        </div>
+                        <div class="template-card">
+                            <h3>Template 3</h3>
+                            <p>Promotional template</p>
+                            <button class="btn btn-secondary" onclick="loadTemplate(3)">Use Template</button>
+                        </div>
+                    </div>
+                    <div class="template-editor">
+                        <h3>Predefined Messages</h3>
+                        <div class="form-group">
+                            <label for="template-name">Template Name</label>
+                            <input type="text" id="template-name" placeholder="Enter template name">
+                        </div>
+                        <div class="form-group">
+                            <label for="template-subject">Subject</label>
+                            <input type="text" id="template-subject" placeholder="Enter subject">
+                        </div>
+                        <div class="form-group">
+                            <label for="template-body">Body</label>
+                            <textarea id="template-body" rows="8" placeholder="Enter email body"></textarea>
+                        </div>
+                        <div class="button-group">
+                            <button id="save-template-btn" class="btn btn-primary">Save Template</button>
+                            <button id="clear-template-btn" class="btn btn-secondary">Clear</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Record Section -->
+            <section id="record-section" class="content-section">
+                <h2>💾 Record</h2>
+                <div class="section-content">
+                    <div class="record-actions">
+                        <button id="save-data-btn" class="btn btn-primary">Save</button>
+                        <button id="view-sent-data-btn" class="btn btn-secondary">View Sent Data</button>
+                        <button id="clear-all-history-btn" class="btn btn-danger">Clear All History</button>
+                        <button id="export-data-btn" class="btn btn-primary"
+                            title="Export all project data as JSON">Download Backup</button>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">📊</div>
+                            <div class="stat-value" id="total-recipients">0</div>
+                            <div class="stat-label">Total Recipients</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-value" id="sent-count">0</div>
+                            <div class="stat-label">Sent</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⏳</div>
+                            <div class="stat-value" id="pending-count">0</div>
+                            <div class="stat-label">Pending</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">❌</div>
+                            <div class="stat-value" id="failed-count">0</div>
+                            <div class="stat-label">Failed</div>
+                        </div>
+                    </div>
+
+                    <div class="sent-data-table" id="sent-data-table">
+                        <h3>Sent Data History</h3>
+                        <div id="sent-data-content">
+                            <p class="empty-state">No sent data available</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Exit Section -->
+            <section id="exit-section" class="content-section">
+                <h2>🚪 Exit</h2>
+                <div class="section-content">
+                    <div class="exit-card">
+                        <h3>End Project</h3>
+                        <p>Are you sure you want to close the project?</p>
+                        <div class="button-group">
+                            <button id="exit-project-btn" class="btn btn-danger">Close Project</button>
+                            <button id="logout-btn" class="btn btn-secondary">Logout</button>
+                        </div>
+                        <p class="exit-note">Project will be closed and you will be logged out.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="results-section" class="content-section hidden">
+                <h2>📊 Sending Results</h2>
+                <div id="results-content"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="extension-api.js"></script>
+    <script src="main-menu.js"></script>
+</body>
+
+</html>

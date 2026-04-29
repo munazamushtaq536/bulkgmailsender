@@ -309,24 +309,13 @@ async function handleCSVUpload(e) {
 }
 
 // Load recipients
+async function loadRecipients() {
     try {
         const response = await fetch(`${API_BASE}/api/recipients`);
-        const data = await response.json();
+        const recipients = await response.json();
 
         const recipientsList = document.getElementById('recipients-list');
         if (!recipientsList) return;
-
-        // Handle error object instead of array
-        if (data.error || !Array.isArray(data)) {
-            console.error('Failed to load recipients from API:', data);
-            recipientsList.innerHTML = `<p class="error-state" style="color: #d32f2f; font-weight: bold; padding: 1rem;">
-                ⚠️ ${data.error || 'Server returned invalid data format'}
-                <br><small>If you haven't set up Supabase yet, use the provided SQL script.</small>
-            </p>`;
-            return;
-        }
-
-        const recipients = data;
 
         if (recipients.length === 0) {
             recipientsList.innerHTML = '<p class="empty-state">No recipients added yet</p>';

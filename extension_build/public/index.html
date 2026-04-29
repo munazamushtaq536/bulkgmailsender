@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Gmail Sender</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <img src="photos/logo.png" alt="Logo"
+                style="max-width: 280px; height: auto; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.25));">
+            <p class="subtitle">Send personalized emails to multiple recipients at once</p>
+        </header>
+
+        <!-- User Info (will be populated after login) -->
+        <div id="user-info" class="user-info hidden"></div>
+
+        <!-- Authentication Section -->
+        <section id="auth-section" class="card hidden">
+            <h2>🔐 Authentication Required</h2>
+            <p>Connect your Gmail account to start sending emails.</p>
+            <button id="auth-btn" class="btn btn-primary">Connect Gmail Account</button>
+        </section>
+
+        <!-- Main Content -->
+        <section id="main-content" class="hidden">
+            <div class="stats-bar">
+                <div class="stat">
+                    <span class="stat-label">Total Recipients</span>
+                    <span class="stat-value" id="total-recipients">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Sent</span>
+                    <span class="stat-value" id="sent-count">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Pending</span>
+                    <span class="stat-value" id="pending-count">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Failed</span>
+                    <span class="stat-value" id="failed-count">0</span>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <!-- Recipients Section -->
+                <section class="card recipients-section">
+                    <h2>👥 Recipients</h2>
+
+                    <div class="input-group">
+                        <textarea id="recipients-input"
+                            placeholder="Enter email addresses (one per line or comma-separated)" rows="4"></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="add-recipients-btn" class="btn btn-secondary">Add Recipients</button>
+                        <label for="csv-file" class="btn btn-secondary">📁 Upload CSV</label>
+                        <input type="file" id="csv-file" accept=".csv" style="display: none;">
+                    </div>
+
+                    <div class="recipients-list" id="recipients-list">
+                        <p class="empty-state">No recipients added yet</p>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="clear-recipients-btn" class="btn btn-danger">Clear All</button>
+                    </div>
+                </section>
+
+                <!-- Email Composer -->
+                <section class="card">
+                    <h2>✏️ Compose Email</h2>
+
+                    <div class="form-group">
+                        <label for="subject-input">Subject</label>
+                        <input type="text" id="subject-input" placeholder="Enter email subject">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="body-input">Body (HTML supported)</label>
+                        <textarea id="body-input" placeholder="Enter email body..." rows="12"></textarea>
+                        <small>HTML tags are supported. Use &lt;br&gt; for line breaks.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="delay-input">Delay between emails (ms)</label>
+                        <input type="number" id="delay-input" value="2000" min="1000" max="10000" step="500">
+                        <small>Recommended: 2000ms to avoid rate limits</small>
+                    </div>
+
+                    <button id="send-btn" class="btn btn-primary btn-large">🚀 Send Emails</button>
+
+                    <div id="progress-section" class="hidden">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <p id="progress-text" class="progress-text"></p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Results Section -->
+            <section id="results-section" class="card hidden">
+                <h2>📊 Sending Results</h2>
+                <div id="results-content"></div>
+            </section>
+        </section>
+    </div>
+
+    <script src="extension-api.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

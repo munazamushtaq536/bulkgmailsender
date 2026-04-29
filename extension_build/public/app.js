@@ -148,18 +148,15 @@ document.getElementById('add-recipients-btn').addEventListener('click', async ()
 
         const data = await response.json();
 
-        if (response.ok && data.success) {
+        if (data.success) {
             document.getElementById('recipients-input').value = '';
             await loadRecipients();
             updateStats();
-            alert(`Successfully added ${emails.length} recipient(s) to cloud.`);
-        } else {
-            console.error('API Error details:', data);
-            alert(`Failed to add recipients: ${data.error || 'Unknown server error'}\n\nTip: Ensure your Supabase tables are created.`);
+            alert(`Added ${emails.length} recipients`);
         }
     } catch (error) {
-        console.error('Network or Extension error:', error);
-        alert('Could not connect to the recipient service. Check your Vercel URL in extension-api.js or your internet connection.');
+        console.error('Failed to add recipients:', error);
+        alert('Failed to add recipients');
     }
 });
 

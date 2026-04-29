@@ -3,7 +3,6 @@
   "name": "Fire Mail - Bulk Gmail Sender",
   "version": "1.0.1",
   "description": "Send personalized emails to multiple recipients directly from Chrome.",
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAz7LGeG64yvKVBJR4nZH62Kwn1NjdaAopAKL3tnsx9nAKcVeZhps+sANJvbvvsd911asd7f6Ja5WHVpvBk8sWGnbu4i0g3PGvv7V++uum5J2MgqKUoHlUn5ErJOxQrO7swPasNdVaX+dxu6l9LP6paMm5+g1rIlMo51BPIUeMO8LqJKtrZSUFka5DF1hdFvJhfw0FtRIPrNLOlwBZwUie2QteUYcfWJi5yho6nJr4VNQbaBOwgFLfq9WDrKGkaeuQX7gTln1ZvJ9848fGYfd06VRYMSXISqxGN5Qngvsma/YESN4m6t5vq89Jr8TuPVh3WOILfVYsB7SfkwnA+A2aUQIDAQAB",
   "permissions": [
     "storage",
     "identity",
