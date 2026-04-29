@@ -9,24 +9,31 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// --- SUPABASE CONFIGURATION ---
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-    console.error('[Supabase] Missing environment variables! Please set SUPABASE_URL and SUPABASE_ANON_KEY in Vercel settings.');
+let supabase;
+try {
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_ANON_KEY;
+    
+    if (supabaseUrl && supabaseKey) {
+        supabase = createClient(supabaseUrl, supabaseKey);
+    } else {
+        console.error('[Supabase] Missing environment variables!');
+    }
+} catch (e) {
+    console.error('[Supabase] Client Initialization Failed:', e);
 }
-
-const supabase = createClient(supabaseUrl || '', supabaseKey || '');
 
 // --- API ROUTES ---
 
-// Check Authentication & Backend Status
 app.get('/api/check-auth', async (req, res) => {
     res.json({
         authenticated: true,
         backend: "Supabase + Vercel",
-        online: !!(supabaseUrl && supabaseKey)
+        supabase_initialized: !!supabase,
+        env_vars: {
+            url: !!process.env.SUPABASE_URL,
+            key: !!process.env.SUPABASE_ANON_KEY
+        }
     });
 });
 
@@ -199,6 +206,17 @@ app.delete('/api/schedule/:id', async (req, res) => {
 
     if (error) return res.status(500).json({ error: error.message });
     res.json({ success: true });
+});
+
+
+// Error Handler
+app.use((err, req, res, next) => {
+    console.error('[Server Error]', err);
+    res.status(500).json({ 
+        error: 'Backend Error', 
+        message: err.message,
+        hint: 'Check Supabase connection and environment variables.' 
+    });
 });
 
 // Export for Vercel
