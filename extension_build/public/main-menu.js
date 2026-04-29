@@ -863,8 +863,15 @@ async function loadTemplateIntoSend() {
     alert('Template loaded into compose area!');
 }
 
-// Save template
+// Save template (Handles both Create and Update)
 async function saveTemplate() {
+    const saveBtn = document.getElementById('save-template-btn');
+    const editId = saveBtn?.dataset.editId;
+
+    if (editId) {
+        return await updateTemplate(editId);
+    }
+
     const name = document.getElementById('template-name')?.value;
     const subject = document.getElementById('template-subject')?.value;
     const body = document.getElementById('template-body')?.value;
@@ -880,9 +887,7 @@ async function saveTemplate() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, subject, body })
         });
-
         const data = await response.json();
-
         if (data.success) {
             alert('Template saved successfully!');
             clearTemplate();
@@ -988,14 +993,11 @@ window.editTemplate = async function (templateId) {
             if (subjectInput) subjectInput.value = template.subject;
             if (bodyInput) bodyInput.value = template.body;
 
-            // Update save button to edit mode
+            // Update save button UI to edit mode
             const saveBtn = document.getElementById('save-template-btn');
             if (saveBtn) {
                 saveBtn.dataset.editId = templateId;
                 saveBtn.textContent = 'Update Template';
-                saveBtn.onclick = async () => {
-                    await updateTemplate(templateId);
-                };
             }
         }
     } catch (error) {
@@ -1033,7 +1035,6 @@ async function updateTemplate(templateId) {
             if (saveBtn) {
                 saveBtn.dataset.editId = '';
                 saveBtn.textContent = 'Save Template';
-                saveBtn.onclick = saveTemplate;
             }
         }
     } catch (error) {
