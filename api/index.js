@@ -164,18 +164,37 @@ app.get('/api/sent-emails', async (req, res) => {
     const { data, error } = await supabase
         .from('sent_history')
         .select('*')
-        .order('sentAt', { ascending: false });
+        .order('sent_at', { ascending: false });
 
     if (error) return res.status(500).json({ error: error.message });
-    res.json(data || []);
+    // Normalize column names to camelCase for the frontend
+    const normalized = (data || []).map(r => ({
+        id: r.id,
+        recipientEmail: r.recipient_email,
+        subject: r.subject,
+        body: r.body,
+        status: r.status,
+        error: r.error,
+        sentAt: r.sent_at
+    }));
+    res.json(normalized);
 });
 
 app.post('/api/sent-emails-internal', async (req, res) => {
-    const { data, error } = await supabase
+    const { recipientEmail, subject, body, status, error, sentAt } = req.body;
+    const insertData = {
+        recipient_email: recipientEmail,
+        subject,
+        body,
+        status,
+        error: error || null,
+        sent_at: sentAt || new Date().toISOString()
+    };
+    const { data, error: dbError } = await supabase
         .from('sent_history')
-        .insert([req.body]);
+        .insert([insertData]);
 
-    if (error) return res.status(500).json({ error: error.message });
+    if (dbError) return res.status(500).json({ error: dbError.message });
     res.json({ success: true });
 });
 
@@ -190,12 +209,22 @@ app.get('/api/schedule', async (req, res) => {
 });
 
 app.post('/api/schedule', async (req, res) => {
+    const { date, time, subject, body, selectedRecipients } = req.body;
+    const insertData = {
+        date,
+        time,
+        scheduled_at: date && time ? `${date}T${time}` : null,
+        subject,
+        body,
+        selected_recipients: selectedRecipients || [],
+        status: 'pending'
+    };
     const { data, error } = await supabase
         .from('schedules')
-        .insert([req.body]);
+        .insert([insertData]);
 
     if (error) return res.status(500).json({ error: error.message });
-    res.json({ success: true, schedule: data ? data[0] : req.body });
+    res.json({ success: true, schedule: data ? data[0] : insertData });
 });
 
 app.delete('/api/schedule/:id', async (req, res) => {
